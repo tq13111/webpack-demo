@@ -1,9 +1,28 @@
-var path = require('path');
-
+const base = require("./webpack.base.js");
 module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
-  output: {
-    filename: '[name].[contenthash].js'
-  }
+  ...base,
+  devtool: "inline-source-map",
+  devServer: {
+    contentBase: "./dist",
+  },
+  mode: "development",
+  module: {
+    rules: [
+      ...base.module.rules,
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              // `dart-sass` 是首选
+              implementation: require("sass"),
+            },
+          },
+        ],
+      },
+    ],
+  },
 };
